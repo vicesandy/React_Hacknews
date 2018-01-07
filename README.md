@@ -1,1 +1,1 @@
-# Following create-react-app tutorial 
+# Following tutorial to create a clone of Hackernews
