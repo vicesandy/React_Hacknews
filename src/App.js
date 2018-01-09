@@ -20,27 +20,32 @@ import './App.css';
   			points: 5,
   			objectID: 1,
   		},
+
+  		{
+  			title: 'myMobx',
+  			url: '//github.com/reactjs/mobx',
+  			author:'na',
+  			num_comments: 10,
+  			points: 15,
+  			//Dont use index of item in array because it is not stable, always use self-defined object ID
+  			objectID: 2,
+  		},
   ];
 
 class App extends Component {
   render() {
     return (
     	<div className = "MyApp">
-    	{list.map(function(item){
-    		return (
-    			<div>
-    			<span>
-    				<a href={item.url}>{item.title}</a>
-    			</span>
-    			<span>{item.points}</span>
-    			<span>{item.num_comments}</span>
-    			<span>{item.author}</span>
-    			</div>
-
-    			);
-    	})}
-
-
+	    	{list.map(item =>
+	    			<div key={item.objectID}>
+	    			<span>
+	    				<a href={item.url}>{item.title}</a>
+	    			</span>
+	    			<span>{item.points}</span>
+	    			<span>{item.num_comments}</span>
+	    			<span>{item.author}</span>
+	    			</div>
+	    	)}
     	</div>
     );
   }
