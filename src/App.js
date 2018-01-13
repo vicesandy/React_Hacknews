@@ -45,13 +45,31 @@ import './App.css';
   const sam = new Developer('Sam', 'Chen');
   console.log(sam.getName);
 
+
+const userService = {
+	getUserName(user){
+		return user.firstname + '' + user.lastname;
+	},
+};
+
+const key = 'name';
+const user = {
+	[key]: 'robin',
+};
+
 class App extends Component {
   constructor(props){
   	super(props);
 
   	this.state = {
-  		list: list,
+  		list,
   	};
+
+  	this.onDismiss = this.onDismiss.bind(this);
+  }
+
+  onDismiss(id){
+
   }
 
   render() {
@@ -65,6 +83,14 @@ class App extends Component {
 	    			<span>{item.points}</span>
 	    			<span>{item.num_comments}</span>
 	    			<span>{item.author}</span>
+
+	    			<span>
+	    			<button
+	    				onClick = {() => this.onDismiss(item.objectID)} type = "button">
+	    				DIsmiss
+	    			</button>
+	    			</span>
+
 	    			</div>
 	    	)}
     	</div>
