@@ -32,6 +32,20 @@ import './App.css';
   		},
   ];
 
+  const user_list = [
+      {
+        name: '',
+        dawg: '',
+        email: '',
+        phone: '',
+        start: '',  //Start Location of Safe Walk
+        end: '',    //End Location of Safe walk
+        walk_date: '',
+        walk_time: '',
+      },
+  ];
+
+
   class Developer {
   		constructor(firstname, lastname){
   			this.firstname = firstname;
@@ -57,6 +71,10 @@ const user = {
 	[key]: 'robin',
 };
 
+class ExplainBindingComponent extends Component{
+	onClick
+}
+
 class App extends Component {
   constructor(props){
   	super(props);
@@ -70,6 +88,7 @@ class App extends Component {
 
   onDismiss(id){
   	const updatedList = this.state.list.filter(item => item.objectID !== id);
+  	this.setState({ list: updatedList });
   }
 
   render() {
@@ -90,7 +109,6 @@ class App extends Component {
 	    				DIsmiss
 	    			</button>
 	    			</span>
-
 	    			</div>
 	    	)}
     	</div>
