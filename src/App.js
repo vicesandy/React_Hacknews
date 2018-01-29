@@ -80,7 +80,8 @@ class App extends Component {
   	super(props);
 
   	this.state = {
-  		list,
+  		list: list,
+      user_list: user_list,
   	};
 
   	this.onDismiss = this.onDismiss.bind(this);
