@@ -74,7 +74,6 @@ const user = {
 class App extends Component {
   constructor(props){
   	super(props);
-
   	this.state = {
   		list: list,
   	};
@@ -88,9 +87,15 @@ class App extends Component {
     });
   }
 
+  //JS callback function is required for event handlers,
   render() {
     return (
     	<div className = "MyApp">
+      <form>
+        <input type = "text" />
+      </form>
+
+
 	    	{this.state.list.map(item =>
 	    			<div key={item.objectID}>
 	    			<span>
@@ -101,6 +106,8 @@ class App extends Component {
 	    			<span>{item.author}</span>
 
 	    			<span>
+
+
 	    			<button
 	    				onClick = {() => this.onDismiss(item.objectID)} type = "button">
 	    				DIsmiss
