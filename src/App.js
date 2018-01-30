@@ -71,10 +71,6 @@ const user = {
 	[key]: 'robin',
 };
 
-class ExplainBindingComponent extends Component{
-	onClick
-}
-
 class App extends Component {
   constructor(props){
   	super(props);
@@ -82,13 +78,11 @@ class App extends Component {
   	this.state = {
   		list: list,
   	};
-
-  	this.onDismiss = this.onDismiss.bind(this);
   }
 
-  onDismiss(id){
-  	const updatedList = this.state.list.filter(item => item.objectID !== id);
-  	
+  onDismiss = (id) => {
+    const updatedList = this.state.list.filter(item => item.objectID !== id);
+    
     this.setState({ 
       list: updatedList 
     });
