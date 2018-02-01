@@ -73,10 +73,8 @@ const user = {
 
 const isSearched = searchTerm => item => item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-class Search extends Component {
-  render() {
-    const {value, onChange, children} = this.props;
-
+function Search(props){
+  const {value, onChange, children} = props;
     return (
         <form>
           {children} <input 
@@ -85,7 +83,6 @@ class Search extends Component {
             onChange={onChange} />
         </form>
       );
-  }
 }
 
 class Table extends Component {
@@ -117,7 +114,7 @@ class Button extends Component {
   render() {
     const {
       onClick,
-      className,
+      className = '',
       children,
     } = this.props;
 
