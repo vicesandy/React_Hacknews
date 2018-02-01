@@ -71,11 +71,15 @@ const user = {
 	[key]: 'robin',
 };
 
+const isSearched = searchTerm => item => item.title.toLowerCase().includes(searchTerm.toLowerCase());
+
+
 class App extends Component {
   constructor(props){
   	super(props);
   	this.state = {
   		list: list,
+      searchTerm: '',
   	};
   }
 
@@ -87,16 +91,26 @@ class App extends Component {
     });
   }
 
+  onSearchChange = this.onSearchChange.bind(this);
+
+  onSearchChange(event){
+    this.setState({
+      searchTerm: event.target.value
+    });
+  }
+
   //JS callback function is required for event handlers,
   render() {
     return (
     	<div className = "MyApp">
       <form>
-        <input type = "text" />
+        <input type="text" 
+          onChange={this.onSearchChange} 
+        />
       </form>
 
 
-	    	{this.state.list.map(item =>
+	    	{this.state.list.filter(isSearched(this.state.searchTerm)).map(item =>
 	    			<div key={item.objectID}>
 	    			<span>
 	    				<a href={item.url}>{item.title}</a>
