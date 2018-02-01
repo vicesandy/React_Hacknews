@@ -73,7 +73,9 @@ const user = {
 
 const isSearched = searchTerm => item => item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-function Search({ value, onChange, children }){
+const Search = ({value, onChange, children}) => {
+    //Do something
+
     return (
         <form>
           {children} <input 
@@ -82,6 +84,7 @@ function Search({ value, onChange, children }){
             onChange={onChange} />
         </form>
       );
+
 }
 
 class Table extends Component {
@@ -160,18 +163,19 @@ class App extends Component {
   render() {
     const {searchTerm, list} = this.state;
     return (
-    	<div className = "MyApp">
-        <Search 
-          value={searchTerm}
-          onChange={this.onSearchChange} />
+      	<div className = "page">
+          <div className = "interactions">
+            <Search 
+              value={searchTerm}
+              onChange={this.onSearchChange} />
 
-        <Table 
-          list={list}
-          pattern={searchTerm}  
-          onDismiss={this.onDismiss} />
-  	    	
-    	</div>
-    );
+            <Table 
+              list={list}
+              pattern={searchTerm}  
+              onDismiss={this.onDismiss} />
+      	    </div>
+      	</div>
+      );
   }
 }
 
