@@ -75,11 +75,11 @@ const isSearched = searchTerm => item => item.title.toLowerCase().includes(searc
 
 class Search extends Component {
   render() {
-    const {value, onChange} = this.props;
+    const {value, onChange, children} = this.props;
 
     return (
         <form>
-          <input 
+          {children} <input 
             type="text"
             value={value}
             onChange={onChange} />
@@ -88,10 +88,9 @@ class Search extends Component {
   }
 }
 
-
 class Table extends Component {
   render() {
-    const { list, pattern, onDismiss } = this.props;
+    const {list, pattern, onDismiss} = this.props;
       return (
         <div>
           {list.filter(isSearched(pattern)).map(item =>
@@ -103,17 +102,34 @@ class Table extends Component {
               <span>{item.num_comments}</span>
               <span>{item.points}</span>
               <span>
-                <button
-                  onClick={() => onDismiss(item.objectID)}
-                  type="button">
+                <Button onClick={() => onDismiss(item.objectID)}>
                   DisMiss
-                </button>
+                </Button>
               </span>
             </div>
             )}
         </div>
       );
     }
+}
+
+class Button extends Component {
+  render() {
+    const {
+      onClick,
+      className,
+      children,
+    } = this.props;
+
+    return (
+        <button
+          onClick={onClick}
+          className={className}
+          type="button" >
+          {children}
+        </button>
+      );
+  }
 }
 
 
