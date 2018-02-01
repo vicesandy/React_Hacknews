@@ -73,6 +73,7 @@ const user = {
 
 const isSearched = searchTerm => item => item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
+//Controlled & unControlled componenet
 class App extends Component {
   constructor(props){
   	super(props);
@@ -99,13 +100,13 @@ class App extends Component {
   }
 
   //JS callback function is required for event handlers,
+  //The internal component state is the single source of truth for the input field
   render() {
     const {searchTerm, list} = this.state;
-
     return (
     	<div className = "MyApp">
       <form>
-        <input type="text" 
+        <input type="text" value={searchTerm}
           onChange={this.onSearchChange} 
         />
       </form>
