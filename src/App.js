@@ -87,6 +87,18 @@ const Search = ({value, onChange, children}) => {
 
 }
 
+const largeColumn = {
+  width: '40%',
+};
+
+const midColumn = {
+  width: '30%',
+};
+
+const smallColumn = {
+  width: '10%',
+};
+
 class Table extends Component {
   render() {
     const {list, pattern, onDismiss} = this.props;
@@ -94,13 +106,13 @@ class Table extends Component {
         <div className="table">
           {list.filter(isSearched(pattern)).map(item =>
             <div key={item.objectID} className="table-row">
-              <span style={{ width: '40%' }}>
+              <span style={largeColumn}>
                 <a href={item.url}>{item.title}</a>
               </span>
-              <span style={{ width: '30%' }}>{item.author}</span>
+              <span style={midColumn}>{item.author}</span>
               <span>{item.num_comments}</span>
               <span>{item.points}</span>
-              <span>
+              <span style={smallColumn}>
                 <Button onClick={() => onDismiss(item.objectID)}
                         className="button-inline">
                   DisMiss
