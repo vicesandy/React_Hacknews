@@ -2,86 +2,16 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-const DEFAULT_QUERY = 'redux';
+const DEFAULT_QUERY = '';
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
 const url = '${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}';
 
-  const list = [
-  		{
-  			title: 'myReact',
-  			url: '//facebook.github.io/react/',
-  			author: 'J.Chen',
-  			num_comments: 3,
-  			points: 4,
-  			objectID: 0,
-  		},
-
-  		{
-  			title: 'myRedux',
-  			url: '//github.com/reactjs/redux',
-  			author: 'D Abramov, A Clark',
-  			num_comments: 2,
-  			points: 5,
-  			objectID: 1,
-  		},
-
-  		{
-  			title: 'myMobx',
-  			url: '//github.com/reactjs/mobx',
-  			author:'na',
-  			num_comments: 10,
-  			points: 15,
-  			//Dont use index of item in array because it is not stable, always use self-defined object ID
-  			objectID: 2,
-  		},
-  ];
-
-  const user_list = [
-      {
-        name: '',
-        dawg: '',
-        email: '',
-        phone: '',
-        start: '',  //Start Location of Safe Walk
-        end: '',    //End Location of Safe walk
-        walk_date: '',
-        walk_time: '',
-      },
-  ];
-
-
-  class Developer {
-  		constructor(firstname, lastname){
-  			this.firstname = firstname;
-  			this.lastname = lastname;
-  		}
-  		getName() {
-  			return this.firstname + '' + this.lastname
-  		}
-  }
-
-  const sam = new Developer('Sam', 'Chen');
-  console.log(sam.getName);
-
-
-const userService = {
-	getUserName(user){
-		return user.firstname + '' + user.lastname;
-	},
-};
-
-const user = {
-  firstname: 'Sam',
-  lastname: 'Chen',
-};
-
 const isSearched = searchTerm => item => item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
 const Search = ({value, onChange, children}) => {
     //Do something
-
     return (
         <form>
           {children} <input 
@@ -156,15 +86,17 @@ class App extends Component {
   constructor(props){
   	super(props);
   	this.state = {
-  		list: list,
       searchTerm: '',
-      result: null,
+      results: null,
       searchTerm: DEFAULT_QUERY,
   	};
-  }
 
-  setSearchTopStories = this.setSearchTopStories.bind(this);
-  fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
+  this.setSearchTopStories = this.setSearchTopStories.bind(this);
+  this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
+  this.onSearchChange = this.onSearchChange.bind(this);
+  this.onSearchSubmit = this.onSearchSubmit.bind(this);
+  this.onDismiss = this.onDismiss.bind();
+  }
 
   setSearchTopStories(result){
     this.setState({result});
@@ -185,7 +117,10 @@ class App extends Component {
     });
   }
 
-  onSearchChange = this.onSearchChange.bind(this);
+  onSearchSubmit(){
+  	const { searchTerm } = this.state;
+  	this.fetchSearchTopStories(searchTerm);
+  }
 
   onSearchChange(event){
     this.setState({
@@ -193,19 +128,28 @@ class App extends Component {
     });
   }
 
+  componentDidMount(){
+  	const {searchTerm} = this.state;
+  	this.fetchSearchTopStories(searchTerm);
+  }
+
   //JS callback function is required for event handlers,
   //The internal component state is the single source of truth for the input field
   render() {
-    const {searchTerm, list} = this.state;
+    const { searchTerm, result } = this.state;
+    if(!result) { return null; }
+
     return (
       	<div className = "page">
           <div className = "interactions">
             <Search 
               value={searchTerm}
-              onChange={this.onSearchChange} />
+              onChange={this.onSearchChange} 
+              onSubmit={this.onSearchSubmit}>
+             </Search> 
 
             <Table 
-              list={list}
+              list={result.hits}
               pattern={searchTerm}  
               onDismiss={this.onDismiss} />
       	    </div>
