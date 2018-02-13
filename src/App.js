@@ -86,7 +86,6 @@ class App extends Component {
   constructor(props){
   	super(props);
   	this.state = {
-      searchTerm: '',
       results: null,
       searchTerm: DEFAULT_QUERY,
   	};
@@ -109,12 +108,12 @@ class App extends Component {
     .catch(e => e);
   }
 
-  onDismiss = (id) => {
-    const updatedList = this.state.list.filter(item => item.objectID !== id);
-    
-    this.setState({ 
-      list: updatedList 
-    });
+  onDismiss(id) {
+  	const isNotId = item => item.objectID !== id;
+  	const updatedHits = this.state.result.hits.filter(isNotId);
+  	this.setState({
+  		result: Object.assign({}, this.state.result, {hits: updatedHits})
+  	});
   }
 
   onSearchSubmit(){
