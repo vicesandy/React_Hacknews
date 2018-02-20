@@ -11,24 +11,6 @@ const PARAM_PAGE = 'page=';
 const DEFAULT_HPP = '100';
 const PARAM_HPP = 'hitsPerPage=';
 
-const Loading = () =>
-	<div>loading ...</div>
-
-
-/* 
-const Search = ({value, onChange, onSubmit, children}) => 
-        <form onSubmit={onSubmit}>
-          <input 
-            type="text"
-            value={value}
-            onChange={onChange} />
-
-           <button type="submit">
-           	{children}
-           </button>
-        </form>
-*/
-
 
 class Search extends Component {
 	constructor(props){
@@ -102,25 +84,29 @@ const Table = ({list, onDismiss}) =>
 
 
 
-class Button extends Component {
-  render() {
-    const {
-      onClick,
-      className = '',
-      children,
-    } = this.props;
+const Button = ({
+	onClick,
+	className = '',
+	children,
+}) => 
+	<button
+		onClick={onClick}
+		className={className}
+		type="button"
+	>
+		{children}
+	</button>
 
-    return (
-        <button
-          onClick={onClick}
-          className={className}
-          type="button" >
-          {children}
-        </button>
-      );
-  }
-}
 
+const Loading = () =>
+	<div>loading ...</div>
+
+const withLoading = (Component) => ({ isLoading, ...rest }) =>
+	isLoading 
+		? <Loading />
+		: <Component { ...rest } /> 
+
+const ButtonWithLoading = withLoading(Button);
 
 //Controlled & unControlled componenet
 class App extends Component {
@@ -258,12 +244,12 @@ class App extends Component {
       	   
 
       	     <div className="interactions">
-      	     { isLoading 
-      	       ? <Loading />
-      	       : <Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+      	     	<ButtonWithLoading
+      	     		isLoading={isLoading}
+      	     		onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
       	     		More
-      	     	</Button>
-      	     }	
+      	     	</ButtonWithLoading>
+
       	     </div>
       	   </div>
       	</div>
