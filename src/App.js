@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import axios from 'axios';
+import { sortBy } from 'lodash';
 import './App.css';
 
 const DEFAULT_QUERY = '';
@@ -81,8 +82,6 @@ const Table = ({list, onDismiss}) =>
             </div>
             )}
         </div>
-
-
 
 const Button = ({
 	onClick,
@@ -241,15 +240,13 @@ class App extends Component {
 	             <Table 
 	              list={list}
 	              onDismiss={this.onDismiss} />
-      	   
-
+      	  
       	     <div className="interactions">
       	     	<ButtonWithLoading
       	     		isLoading={isLoading}
       	     		onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
       	     		More
       	     	</ButtonWithLoading>
-
       	     </div>
       	   </div>
       	</div>
