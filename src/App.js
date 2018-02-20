@@ -13,6 +13,19 @@ const DEFAULT_HPP = '100';
 const PARAM_HPP = 'hitsPerPage=';
 
 
+const SORTS = {
+	NONE: list => list,
+	TITLE: list => sortBy(list, 'title'),
+	AUTHOR: list => sortBy(list, 'author'),
+	COMMENTS: list => sortBy(list, 'num_comments').reverse(),
+	POINTS: list => sortBy(list, 'points').reverse(),
+};
+
+const Sort = ({ sortKey, onSort, children }) =>
+	<Button onClick={() => onSort(sortKey)}>
+		{children}
+	</Button>
+
 class Search extends Component {
 	constructor(props){
 		super(props);
@@ -53,19 +66,51 @@ class Search extends Component {
 const largeColumn = {
   width: '70%',
 };
-
 const midColumn = {
   width: '30%',
 };
-
 const smallColumn = {
   width: '10%',
 };
 
 
-const Table = ({list, onDismiss}) =>
+const Table = ({list, sortKey, onSort, onDismiss}) =>
         <div className="table">
-          {list.map(item =>
+        	<div className="table-header">
+        		<span style={{ width: '40%' }}>
+        			<Sort
+        				sortKey={'TITLE'}
+        				onSort={onSort} >
+        				Title
+        			</Sort>
+        		</span>
+        		<span style={{ width: '30%' }}>
+        			<Sort
+        				sortKey={'AUTHOR'}
+        				onSort={onSort} >
+        				Author
+        			</Sort>
+        		</span>
+        		<span style={{ width: '10%' }}>
+        			<Sort
+        				sortKey={'COMMENTS'}
+        				onSort={onSort} >
+        				Comments
+        			</Sort>
+        		</span>
+        		<span style={{ width: '10%' }}>
+        			<Sort
+        				sortKey={'POINTS'}
+        				onSort={onSort} >
+        				Points
+        			</Sort>
+        		</span>
+        		<span style={{ width: '10%' }}>
+        				Archive
+        		</span>
+        	</div>
+        	
+          {SORTS[sortKey](list).map(item =>
             <div key={item.objectID} className="table-row">
               <span style={largeColumn}>
                 <a href={item.url}>{item.title}</a>
@@ -119,6 +164,7 @@ class App extends Component {
       searchTerm: DEFAULT_QUERY,
       error: null,
       isLoading: false,
+      sortKey: 'NONE',
   	};
 
   this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
@@ -127,7 +173,13 @@ class App extends Component {
   this.onSearchChange = this.onSearchChange.bind(this);
   this.onSearchSubmit = this.onSearchSubmit.bind(this);
   this.onDismiss = this.onDismiss.bind(this);
+  this.onSort = this.onSort.bind(this);
   }
+
+  onSort(sortKey){
+  	this.setState({ sortKey });
+  }
+
 
   needsToSearchTopStories(searchTerm) {
   	return !this.state.results[searchTerm];
@@ -209,7 +261,8 @@ class App extends Component {
     	results,
     	searchKey,
     	error,
-    	isLoading
+    	isLoading,
+    	sortKey
     } = this.state;
 
     const page = (
@@ -237,8 +290,11 @@ class App extends Component {
               onSubmit={this.onSearchSubmit}>
               Search
              </Search>  
-	             <Table 
+	         
+	         <Table 
 	              list={list}
+	              sortKey={sortKey}
+	              onSort={this.onSort}
 	              onDismiss={this.onDismiss} />
       	  
       	     <div className="interactions">
