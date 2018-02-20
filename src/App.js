@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
 
 const DEFAULT_QUERY = '';
@@ -25,29 +26,41 @@ const Search = ({value, onChange, onSubmit, children}) =>
 */
 
 
-const Search = ({
-		value,
-		onChange,
-		onSubmit,
-		children
-	}) => {
-	let input;
-		return(
-			<form onSubmit={onSubmit}>
-				<input 
-					type="text"
-					value={value}
-					onChange={onChange}
-					ref={(node) => input = node}
-				/>
+class Search extends Component {
+	constructor(props){
+		super(props);
+	}
 
-				<button type="submit">
-					{children}
-				</button>
-			</form>
+	componentDidMount() {
+		if(this.input){
+			this.input.focus();
+		}
+	}
+
+	render() {
+		const {
+			value,
+			onChange,
+			onSubmit,
+			children
+		} = this.props;
+	
+	return (
+		<form onSubmit={onSubmit}>
+			<input 
+				type="text"
+				value={value}
+				onChange={onChange}
+				ref={(node) => { this.input = node; }}
+			/>
+
+			<button type="submit">
+				{children}
+			</button>
+		</form>
 		);
 	}
-      
+}
 
 
 const largeColumn = {
@@ -107,6 +120,8 @@ class Button extends Component {
 
 //Controlled & unControlled componenet
 class App extends Component {
+  _isMounted = false;
+
   constructor(props){
   	super(props);
   	this.state = {
@@ -147,11 +162,10 @@ class App extends Component {
     });
   }
 
-   fetchSearchTopStories(searchTerm, page = 0) {
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
-      .then(response => response.json())
-      .then(result => this.setSearchTopStories(result))
-      .catch(e => this.setState({ error: e }));
+  fetchSearchTopStories(searchTerm, page=0) {
+  	axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
+  		.then(result => this._isMounted && this.setSearchTopStories(result.data))
+  		.catch(error => this._isMounted && this.setState({ error }));
   }
 
   onDismiss(id) {
@@ -184,9 +198,14 @@ class App extends Component {
   }
 
   componentDidMount(){
+  	this._isMounted = true;
   	const { searchTerm } = this.state;
   	this.setState({ searchKey: searchTerm });
   	this.fetchSearchTopStories(searchTerm);
+  }
+
+  componenetWillUnmount(){
+  	this._isMounted = false;
   }
 
   //JS callback function is required for event handlers,
